@@ -1,6 +1,7 @@
 import connection from "../database/database.js";
-import {signInSchema} from "../schemas/users.js";
+import {signInSchema, signUpSchema} from "../schemas/users.js";
 import bcrypt from 'bcrypt';
+import { v4 as uuid } from "uuid";
 
 async function signInUser (req, res){
 
@@ -9,13 +10,9 @@ async function signInUser (req, res){
         password
     } =  req.body;
 
-    const {error} = signInSchema.validate(req.body);
-
-    if(error) return res.status(400).send(error.details[0].message);
-
     try{
 
-        const searchUserEmail = connection.query('SELECT * FROM users WHERE email = $1', [email]);
+        const searchUserEmail = await connection.query('SELECT * FROM users WHERE email = $1', [email]);
 
         if(!searchUserEmail.rowCount){
 
@@ -31,7 +28,7 @@ async function signInUser (req, res){
 
         const token = uuid();
 
-        await connection.query('INSERT INTO sessions (token, user_id) VALUES ($1, $2)', [token, searchUserEmail.rows[0].id];
+        await connection.query('INSERT INTO sessions (token) VALUES ($1)', [token]);
 
         return res.status(200).send(token);
     }
@@ -41,6 +38,44 @@ async function signInUser (req, res){
     }
 }
 
+async function signUpUser(req, res) {
+
+    const {
+        name,
+        email,
+        password,
+        confirmPassword,
+    } = req.body;
+
+    const {error} = signUpSchema.validate(req.body);
+   
+    if(error){
+        
+        return res.status(400).send(error.details[0].message);
+    }
+
+    try{
+        const existEmail = await connection.query('SELECT * FROM users WHERE email = $1', [email]);
+
+        if(existEmail.rowCount){
+
+            return res.status(401).send("Email in use");
+        }
+
+        const passwordEncryted = bcrypt.hashSync(password, 12);
+
+        await connection.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3)', [name, email, passwordEncryted]);
+
+        res.status(200).send('created');
+    }   
+    catch (error){
+
+        return sendStatus(500);
+    }
+
+}
+
 export{
     signInUser,
+    signUpUser,
 }
