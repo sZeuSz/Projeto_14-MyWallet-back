@@ -15,7 +15,7 @@ async function transactionsHistory (req, res) {
     try {
 
         const result = await connection.query(`
-            SELECT sessions.user_id AS id
+            SELECT sessions.user_name, sessions.user_id AS id
             FROM sessions
             JOIN users
             ON sessions."user_id" = users.id
@@ -28,12 +28,17 @@ async function transactionsHistory (req, res) {
         }
 
         const values = await connection.query(`
-            SELECT SUM(transactions.value) AS total
-            FROM transactions
-            WHERE transactions.user_id = $1
-        `, [result.rows[0].id]);
-        
-        console.log(values.rows[0])
+
+            SELECT jsonb_agg(DISTINCT jsonb_build_object('name', users.name)) 
+            AS user, 
+            jsonb_agg(json_build_object('value', transactions.value, 'description', transactions.description,'date', to_char(transactions.date, 'DD/MM/YYYY'))) 
+            AS transactions
+            FROM transactions 
+            JOIN users 
+            ON transactions.user_id = users.id 
+            WHERE transactions.user_id = $1;
+
+        `, [result.rows[0].id])
 
         return res.status(200).send(values.rows);
 

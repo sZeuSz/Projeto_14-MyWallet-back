@@ -8,7 +8,7 @@ const app = express();
 app.use(cors());
 app.use(json());
 
-// //Users
+// // Users
 app.post('/login', signInUser);
 app.post('/signup', signUpUser);
 
@@ -17,4 +17,5 @@ app.post('/entry', transactionsEntry);
 app.post('/exit', transactionsExit);
 app.get('/transactions', transactionsHistory);
 
+// // listen port
 app.listen(4000);
