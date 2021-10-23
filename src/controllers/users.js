@@ -28,7 +28,7 @@ async function signInUser (req, res){
 
         const token = uuid();
 
-        await connection.query('INSERT INTO sessions (token) VALUES ($1)', [token]);
+        await connection.query('INSERT INTO sessions (user_id, token) VALUES ($1, $2)', [searchUserEmail.rows[0].id, token]);
 
         return res.status(200).send(token);
     }
