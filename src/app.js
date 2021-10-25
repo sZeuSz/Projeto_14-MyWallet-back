@@ -19,4 +19,4 @@ app.post('/mywallet/exit', transactionsExit);
 app.get('/mywallet/transactions', transactionsHistory);
 
 // // listen port
-app.listen(4000);
+export default app;
