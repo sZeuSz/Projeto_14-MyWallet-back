@@ -9,6 +9,13 @@ async function signInUser (req, res){
         email,
         password
     } =  req.body;
+    
+    const { error } = signInSchema.validate(req.body);
+    
+    if(error){
+        
+        return res.status(400).send(error.details[0].message);
+    }
 
     try{
 
@@ -59,7 +66,7 @@ async function signUpUser(req, res) {
 
         if(existEmail.rowCount){
 
-            return res.status(401).send("Email in use");
+            return res.status(401).send('Email in use');
         }
 
         const passwordEncryted = bcrypt.hashSync(password, 12);
@@ -75,7 +82,29 @@ async function signUpUser(req, res) {
 
 }
 
+async function logOutUser(req,res) {
+
+    const token = req.headers.authorization?.replace('Bearer ','')
+
+    if (!token) {
+    
+    	return res.status(401).send('Unauthorized');
+    }
+
+    try {
+    
+        await connection.query(`DELETE FROM sessions WHERE token = $1`, [token]);
+
+        return res.sendStatus(200)
+        
+    } catch (error) {
+    
+        return res.sendStatus(500)
+    }
+}
+
 export{
     signInUser,
     signUpUser,
+    logOutUser,
 }

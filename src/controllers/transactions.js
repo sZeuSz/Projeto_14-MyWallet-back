@@ -39,7 +39,13 @@ async function transactionsHistory (req, res) {
             WHERE transactions.user_id = $1;
 
         `, [result.rows[0].id])
+	
 
+	if(!values.rows[0].user){
+	    
+	    return res.status(200).send(result.rows[0].user_name);
+	}
+	
         return res.status(200).send(values.rows);
 
     }
