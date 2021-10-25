@@ -66,14 +66,14 @@ async function signUpUser(req, res) {
 
         if(existEmail.rowCount){
 
-            return res.status(401).send('Email in use');
+            return res.status(409).send('Email in use');
         }
 
         const passwordEncryted = bcrypt.hashSync(password, 12);
 
         await connection.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3)', [name, email, passwordEncryted]);
 
-        res.status(200).send('created');
+        res.status(201).send('created');
     }   
     catch (error){
 
