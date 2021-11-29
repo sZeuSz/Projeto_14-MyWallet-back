@@ -31,7 +31,7 @@ CREATE TABLE public.sessions (
 );
 
 
-ALTER TABLE public.sessions OWNER TO mvsmevhasvurzw;
+ALTER TABLE public.sessions OWNER TO postgres;
 
 --
 -- Name: transactions; Type: TABLE; Schema: public; Owner: postgres
@@ -45,7 +45,7 @@ CREATE TABLE public.transactions (
 );
 
 
-ALTER TABLE public.transactions OWNER TO mvsmevhasvurzw;
+ALTER TABLE public.transactions OWNER TO postgres;
 
 --
 -- Name: users; Type: TABLE; Schema: public; Owner: postgres
@@ -59,7 +59,7 @@ CREATE TABLE public.users (
 );
 
 
-ALTER TABLE public.users OWNER TO mvsmevhasvurzw;
+ALTER TABLE public.users OWNER TO postgres;
 
 --
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -74,7 +74,7 @@ CREATE SEQUENCE public.users_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.users_id_seq OWNER TO mvsmevhasvurzw;
+ALTER TABLE public.users_id_seq OWNER TO postgres;
 
 --
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
