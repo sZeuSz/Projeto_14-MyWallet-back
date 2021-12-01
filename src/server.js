@@ -1,5 +1,4 @@
-import app from './app.js'
+import './setup/setup.js'
+import app from './app.js';
 
-app.listen(4000, () => {
-    console.log("listem");
-})
+app.listen(process.env.PORT);

@@ -22,11 +22,6 @@ async function transactionsHistory (req, res) {
             WHERE sessions.token = $1
         `, [token]);
 
-        if(!result.rowCount){
-
-            return res.status(401).send("Unauthorized");
-        }
-
         const values = await connection.query(`
 
             SELECT jsonb_agg(DISTINCT jsonb_build_object('name', users.name)) 
