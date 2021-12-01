@@ -14,7 +14,7 @@ app.post('/mywallet/sign-up', signUpUser);
 app.get('/mywallet/log-out', logOutUser);
 
 // // Transations getin getout
-app.post('/entry', transactionsEntry);
+app.post('/mywallet/entry', transactionsEntry);
 app.post('/mywallet/exit', transactionsExit);
 app.get('/mywallet/transactions', transactionsHistory);
 
